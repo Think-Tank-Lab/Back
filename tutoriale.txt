@@ -1,0 +1,5 @@
+1. Android application development setup in IntelliJ IDEA 2023.2 || Tutorial for Beginners - https://www.youtube.com/watch?v=XJMiSvRmuA8
+
+2. How to Connect Mobile phone with Android Studio to run app |How To Connect Phone With Android Studio: https://www.youtube.com/watch?v=Gzse_F2AYDs
+
+3. android how to enable instalation via usb: https://www.youtube.com/shorts/BhVJ1jie-V8
