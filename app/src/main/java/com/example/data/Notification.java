@@ -10,6 +10,7 @@ public class Notification extends Entity<UUID>
     {
         this.message = message;
         this.sendDate = sendDate;
+        this.setId(UUID.randomUUID());
     }
 
     public String getMessage() {return this.message;}
