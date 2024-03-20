@@ -2,19 +2,19 @@ package com.example.data;
 
 import java.util.*;
 
-public class User extends Entity<UUID>
+public class User extends Entity<String>
 { //that.getId()
     private String firstName;
     private String lastName;
     private String email;
     private String password;
-    public User(String firstName, String lastName, String email, String password)
+    public User(String id, String firstName, String lastName, String email, String password)
     {
+        super(id);
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.setId(UUID.randomUUID());
     }
     public String getFirstName()
     {
