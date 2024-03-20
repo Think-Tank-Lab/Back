@@ -45,8 +45,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //Repository<String, User> userRepository = new UserDBRepository("jdbc:postgresql://localhost:5432/SmartSubsDB", "postgres", "admin");
-
+        Repository<String, User> userRepository = new UserDBRepository("jdbc:postgresql://localhost:5432/SmartSubsDB", "postgres", "admin");
+        // TODO: MODIFICATI CU CONNECTION STRING-UL VOSTRU
 
     }
 
