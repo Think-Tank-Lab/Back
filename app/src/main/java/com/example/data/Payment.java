@@ -2,19 +2,18 @@ package com.example.data;
 
 import java.util.*;
 
-public class Payment extends Entity<UUID>
+public class Payment extends Entity<String>
 { //that.getId()
     private UUID subscription_id;
     private Date paymentDate;
     private Float amount;
     private String status;
-    public Payment(UUID subscription_id, Date paymentDate, Float amount, String status)
+    public Payment(String id, Date paymentDate, Float amount, String status)
     {
-        this.subscription_id = subscription_id;
+        super(id);
         this.paymentDate = paymentDate;
         this.amount = amount;
         this.status = status;
-        this.setId(UUID.randomUUID());
     }
 
     public UUID getSubscription_id() {return this.subscription_id;}

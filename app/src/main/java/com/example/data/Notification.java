@@ -2,15 +2,15 @@ package com.example.data;
 
 import java.util.*;
 
-public class Notification extends Entity<UUID>
+public class Notification extends Entity<String>
 { //that.getId()
     private String message;
     private Date sendDate;
-    public Notification(String message, Date sendDate)
+    public Notification(String id, String message, Date sendDate)
     {
+        super(id);
         this.message = message;
         this.sendDate = sendDate;
-        this.setId(UUID.randomUUID());
     }
 
     public String getMessage() {return this.message;}
