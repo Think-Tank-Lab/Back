@@ -3,3 +3,12 @@
 2. How to Connect Mobile phone with Android Studio to run app |How To Connect Phone With Android Studio: https://www.youtube.com/watch?v=Gzse_F2AYDs
 
 3. android how to enable instalation via usb: https://www.youtube.com/shorts/BhVJ1jie-V8
+
+
+DACA va da eroarea asta:
+sdk location not found. define a valid sdk location with an android_home environment variable or by setting 
+the sdk.dir path in your project's local properties file at 'aici e cv path'.
+
+mergeti in gradle.properties si modificati sdk.dir cu path-ul vostru catre acel sdk
+daca tot nu merge, cautati fisierul local.properties si scrieti acolo acel path
+daca nu aveti fisierul local.properties, il faceti voi si il puneti in locatie cu fisierului tutoriale.txt
