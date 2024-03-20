@@ -13,6 +13,13 @@ import com.example.smartsubs.databinding.ActivityMainBinding;
 import android.view.Menu;
 import android.view.MenuItem;
 
+
+import com.example.data.User;
+import com.example.repository.Repository;
+import com.example.repository.UserDBRepository;
+
+
+
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
@@ -37,6 +44,10 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        //Repository<String, User> userRepository = new UserDBRepository("jdbc:postgresql://localhost:5432/SmartSubsDB", "postgres", "admin");
+
+
     }
 
     @Override
