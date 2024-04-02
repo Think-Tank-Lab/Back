@@ -1,17 +1,18 @@
 package com.example.repository;
 
 import com.example.data.User;
+import com.example.data.Notification;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDBRepository implements Repository<String, User> {
+public class NotificationDBRepository implements Repository<String, User> {
     private final String url;
     private final String username;
     private final String password;
 
-    public UserDBRepository(String url, String username, String password)
+    public NotificationDBRepository(String url, String username, String password)
     {
         this.url = url;
         this.username = username;
@@ -19,43 +20,39 @@ public class UserDBRepository implements Repository<String, User> {
     }
 
     @Override
-    public List<User> getAll()
+    public List<Notification> getAll()
     {
-        List<User> users = new ArrayList<>();
+        List<Notification> notifications = new ArrayList<>();
         try(Connection connection = DriverManager.getConnection(url, username, password);
-            PreparedStatement statement = connection.prepareStatement("SELECT * from \"User\"");
+            PreparedStatement statement = connection.prepareStatement("SELECT * from \"Notification\"");
             ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next())
             {
                 String  id = resultSet.getString("id");
-                String firstName = resultSet.getString("firstName");
-                String lastName = resultSet.getString("lastName");
-                String email = resultSet.getString("email");
-                String password = resultSet.getString("password");
-                User user = new User(id, firstName, lastName, email, password);
+                String message = resultSet.getMessage("message");
+                Date sendDate = resultSet.getDate("sendDate");
+                Notification notification = new Notification(id, message, sendDate);
 
-                users.add(user);
+                notifications.add(notification);
             }
-            return users;
+            return notifications;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return users;
+        return notifications;
     }
 
     @Override
-    public void add(User user)
+    public void add(Notification notification)
     {
-        String sql = "insert into \"User\" (id, firstName, lastName, email, password) values (?, ?, ?, ?, ?)";
+        String sql = "insert into \"Notification\" (id, message, sendDate) values (?, ?, ?)";
 
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement ps = connection.prepareStatement(sql)){
 
-            ps.setString(1, user.getId());
-            ps.setString(2, user.getFirstName());
-            ps.setString(3, user.getLastName());
-            ps.setString(4, user.getEmail());
-            ps.setString(5, user.getPassword());
+            ps.setString(1, notification.getId());
+            ps.setString(2, notification.getMessage());
+            ps.setDate(3, notification.getSendDate());
 
             ps.executeUpdate();
         } catch (SQLException e){
@@ -65,12 +62,12 @@ public class UserDBRepository implements Repository<String, User> {
     }
 
     @Override
-    public void delete(User user){
-        String sql = "DELETE from \"User\" where id = ?";
+    public void delete(Notification notification){
+        String sql = "DELETE from \"Notification\" where id = ?";
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
-            ps.setString(1, user.getId());
+            ps.setString(1, notification.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -79,7 +76,7 @@ public class UserDBRepository implements Repository<String, User> {
 
     @Override
     public User searchById(String id){
-        String sql = "select * from \"User\" where id = ? ";
+        String sql = "select * from \"Notification\" where id = ? ";
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
@@ -87,11 +84,9 @@ public class UserDBRepository implements Repository<String, User> {
             ResultSet resultSet = ps.executeQuery();
             resultSet.next();
 
-            String firstName = resultSet.getString("firstName");
-            String lastName = resultSet.getString("lastName");
-            String email = resultSet.getString("email");
-            String password = resultSet.getString("password");
-            return new User(id, firstName, lastName, email, password);
+            String message = resultSet.getString("message");
+            Date sendDate = resultSet.getDate("sendDate");
+            return new Notification(id, message, sendDate);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -99,16 +94,14 @@ public class UserDBRepository implements Repository<String, User> {
     }
 
     @Override
-    public void update(User oldUser,User newUser){
-        String sql = "update \"User\" set firstName = ?, lastName = ?, email = ?,password = ? where id = ?";
+    public void update(User oldNotification,User newNotification){
+        String sql = "update \"Notification\" set message = ?, sendDate = ? where id = ?";
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
-            ps.setString(1, newUser.getFirstName());
-            ps.setString(2, newUser.getLastName());
-            ps.setString(3, newUser.getEmail());
-            ps.setString(4, newUser.getPassword());
-            ps.setString(5, oldUser.getId());
+            ps.setString(1, newNotification.getEmail());
+            ps.setString(2, newNotification.getPassword());
+            ps.setString(3, oldNotification.getId());
 
             ps.executeUpdate();
 
