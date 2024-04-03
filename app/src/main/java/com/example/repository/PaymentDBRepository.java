@@ -6,6 +6,7 @@ import com.example.data.Payment;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class PaymentDBRepository implements Repository<String, Payment> {
     private final String url;
@@ -28,13 +29,13 @@ public class PaymentDBRepository implements Repository<String, Payment> {
             ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next())
             {
-                String  id = resultSet.getString("id");
-                UUID subscription_id = UUID.fromString(resultSet.getString("subscription_id"));
+                String id = resultSet.getString("id");
+                String subscription_id = resultSet.getString("subscription_id");
                 Date paymentDate = resultSet.getDate("paymentDate");
                 Float amount = resultSet.getFloat("amount");
                 String status = resultSet.getString("status");
                 Payment payment = new Payment(id, paymentDate, amount, status);
-                payment.setSubscription_id(subscription_id);
+                payment.setSubscription_id(UUID.fromString(subscription_id));
 
                 payments.add(payment);
             }
@@ -54,8 +55,8 @@ public class PaymentDBRepository implements Repository<String, Payment> {
              PreparedStatement ps = connection.prepareStatement(sql)){
 
             ps.setString(1, payment.getId());
-            ps.setString(2, UUID.toString(payment.getSubscription_id));
-            ps.setDate(3, payment.getPaymentDate());
+            ps.setString(2, String.valueOf(payment.getSubscription_id()));
+            ps.setDate(3, (Date) payment.getPaymentDate());
             ps.setFloat(4, payment.getAmount());
             ps.setString(5, payment.getStatus());
 
@@ -80,7 +81,7 @@ public class PaymentDBRepository implements Repository<String, Payment> {
     }
 
     @Override
-    public User searchById(String id){
+    public Payment searchById(String id){
         String sql = "select * from \"Payment\" where id = ? ";
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -108,10 +109,10 @@ public class PaymentDBRepository implements Repository<String, Payment> {
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
-            ps.setDate(1, newPayment.getPaymentDate());
+            ps.setDate(1, (Date) newPayment.getPaymentDate());
             ps.setFloat(2, newPayment.getAmount());
             ps.setString(3, newPayment.getStatus());
-            ps.setString(4, oldPayment.getId());
+            ps.setString(4, newPayment.getId());
 
             ps.executeUpdate();
 

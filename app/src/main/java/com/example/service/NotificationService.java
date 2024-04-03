@@ -4,10 +4,12 @@ import com.example.data.Notification;
 import com.example.data.validators.ValidationException;
 import com.example.repository.NotificationDBRepository;
 
+import java.util.Date;
+
 public class NotificationService{
     private final NotificationDBRepository notificationRepository;
 
-    public NotificationService(NotificationDBRepository motificationRepository) {
+    public NotificationService(NotificationDBRepository notificationRepository) {
         this.notificationRepository = notificationRepository;
     }
 

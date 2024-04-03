@@ -6,6 +6,9 @@ import com.example.data.validators.ValidationException;
 import com.example.repository.SubscriptionDBRepository;
 import com.example.repository.PaymentDBRepository;
 
+import java.util.Date;
+import java.util.UUID;
+
 public class PaymentService{
     private final PaymentDBRepository paymentRepository;
     private final SubscriptionDBRepository subscriptionRepository;
@@ -20,13 +23,13 @@ public class PaymentService{
     {
         Payment payment = new Payment(id, paymentDate, amount, status);
         payment.setSubscription_id(subscription_id);
-        s_id = UUID.toString(subscription_id);
+        UUID s_id = subscription_id;
         if(paymentRepository.searchById(id) != null)
         {
             throw new ValidationException("\nExista deja acest Payment!\n");
         }
-        if(subscriptionRepository.searchById(s_id) == null){
-            throw new ValidationException("\nNu exista acest Subscription!\n")
+        if(subscriptionRepository.searchById(String.valueOf(s_id)) == null){
+            throw new ValidationException("\nNu exista acest Subscription!\n");
         }
 
         paymentRepository.add(payment);

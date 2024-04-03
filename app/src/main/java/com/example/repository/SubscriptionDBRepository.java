@@ -34,7 +34,6 @@ public class SubscriptionDBRepository implements Repository<String, Subscription
             {
                 String id = resultSet.getString("id");
                 String u_id = resultSet.getString("user_id");
-                UUID user_id = UUID.fromString(u_id);
                 String subscriptionName = resultSet.getString("subscriptionName");
                 Date startDate = resultSet.getDate("startDate");
                 Date endDate = resultSet.getDate("endDate");
@@ -42,7 +41,7 @@ public class SubscriptionDBRepository implements Repository<String, Subscription
                 Float price = resultSet.getFloat("price");
 
                 Subscription subscription = new Subscription(id, subscriptionName, startDate, endDate, subscriptionType, price);
-                subscription.setUserID(user_id);
+                subscription.setUserID(UUID.fromString(u_id));
 
                 subscriptions.add(subscription);
             }
@@ -54,7 +53,7 @@ public class SubscriptionDBRepository implements Repository<String, Subscription
     }
 
     @Override
-    public void add(SUbscription subscription)
+    public void add(Subscription subscription)
     {
         String sql = "insert into \"Subscription\" (id, user_id, subscriptionName, startDate, endDate, subscriptionType, price) values (?, ?, ?, ?, ?, ?, ?)";
 
@@ -62,10 +61,10 @@ public class SubscriptionDBRepository implements Repository<String, Subscription
              PreparedStatement ps = connection.prepareStatement(sql)){
 
             ps.setString(1, subscription.getId());
-            ps.setString(2, UUID.toString(subscription.getUserID()));
+            ps.setString(2, String.valueOf(subscription.getUserID()));
             ps.setString(3, subscription.getSubscriptionName());
-            ps.setDate(4, subscription.getStartDate());
-            ps.setDate(5, subscription.getEndDate());
+            ps.setDate(4, (Date) subscription.getStartDate());
+            ps.setDate(5, (Date) subscription.getEndDate());
             ps.setString(6, subscription.getSubscriptionType());
             ps.setFloat(7, subscription.getPrice());
 
@@ -90,7 +89,7 @@ public class SubscriptionDBRepository implements Repository<String, Subscription
     }
 
     @Override
-    public User searchById(String id){
+    public Subscription searchById(String id){
         String sql = "select * from \"Subscription\" where id = ? ";
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -104,7 +103,7 @@ public class SubscriptionDBRepository implements Repository<String, Subscription
             Date startDate = resultSet.getDate("startDate");
             Date endDate = resultSet.getDate("endDate");
             String subscriptionType = resultSet.getString("subscriptionType");
-            Folat price = resultSet.getFloat("price");
+            Float price = resultSet.getFloat("price");
             Subscription subscription = new Subscription(id, subscriptionName, startDate, endDate, subscriptionType, price);
             subscription.setUserID(user_id);
             return subscription;
@@ -121,11 +120,11 @@ public class SubscriptionDBRepository implements Repository<String, Subscription
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ps.setString(1, newSubscription.getSubscriptionName());
-            ps.setString(2, newSubscription.getStartDate());
-            ps.setString(3, newSubscription.getEndDate());
+            ps.setDate(2, (Date) newSubscription.getStartDate());
+            ps.setDate(3, (Date) newSubscription.getEndDate());
             ps.setString(4, newSubscription.getSubscriptionType());
-            ps.setString(5, newSubscription.getPrice());
-            ps.setString(6, oldSubscription.getID());
+            ps.setFloat(5, newSubscription.getPrice());
+            ps.setString(6, newSubscription.getId());
 
             ps.executeUpdate();
 

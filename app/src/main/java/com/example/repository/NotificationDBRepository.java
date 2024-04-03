@@ -7,7 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NotificationDBRepository implements Repository<String, User> {
+public class NotificationDBRepository implements Repository<String, Notification> {
     private final String url;
     private final String username;
     private final String password;
@@ -28,8 +28,8 @@ public class NotificationDBRepository implements Repository<String, User> {
             ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next())
             {
-                String  id = resultSet.getString("id");
-                String message = resultSet.getMessage("message");
+                String id = resultSet.getString("id");
+                String message = resultSet.getString("message");
                 Date sendDate = resultSet.getDate("sendDate");
                 Notification notification = new Notification(id, message, sendDate);
 
@@ -52,7 +52,7 @@ public class NotificationDBRepository implements Repository<String, User> {
 
             ps.setString(1, notification.getId());
             ps.setString(2, notification.getMessage());
-            ps.setDate(3, notification.getSendDate());
+            ps.setDate(3, (Date) notification.getSendDate());
 
             ps.executeUpdate();
         } catch (SQLException e){
@@ -75,7 +75,7 @@ public class NotificationDBRepository implements Repository<String, User> {
     }
 
     @Override
-    public User searchById(String id){
+    public Notification searchById(String id){
         String sql = "select * from \"Notification\" where id = ? ";
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -94,14 +94,14 @@ public class NotificationDBRepository implements Repository<String, User> {
     }
 
     @Override
-    public void update(User oldNotification,User newNotification){
+    public void update(Notification oldNotification,Notification newNotification){
         String sql = "update \"Notification\" set message = ?, sendDate = ? where id = ?";
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
-            ps.setString(1, newNotification.getEmail());
-            ps.setString(2, newNotification.getPassword());
-            ps.setString(3, oldNotification.getId());
+            ps.setString(1, newNotification.getMessage());
+            ps.setDate(2, (Date) newNotification.getSendDate());
+            ps.setString(3, newNotification.getId());
 
             ps.executeUpdate();
 

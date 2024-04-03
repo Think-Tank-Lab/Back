@@ -27,14 +27,12 @@ public class UserDBRepository implements Repository<String, User> {
             ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next())
             {
-                String  id = resultSet.getString("id");
+                String id = resultSet.getString("id");
                 String firstName = resultSet.getString("firstName");
                 String lastName = resultSet.getString("lastName");
                 String email = resultSet.getString("email");
                 String password = resultSet.getString("password");
                 User user = new User(id, firstName, lastName, email, password);
-
-                users.add(user);
             }
             return users;
         } catch (SQLException e) {
@@ -108,7 +106,7 @@ public class UserDBRepository implements Repository<String, User> {
             ps.setString(2, newUser.getLastName());
             ps.setString(3, newUser.getEmail());
             ps.setString(4, newUser.getPassword());
-            ps.setString(5, oldUser.getId());
+            ps.setString(5, newUser.getId());
 
             ps.executeUpdate();
 

@@ -6,6 +6,9 @@ import com.example.data.validators.ValidationException;
 import com.example.repository.UserDBRepository;
 import com.example.repository.SubscriptionDBRepository;
 
+import java.util.Date;
+import java.util.UUID;
+
 public class SubscriptionService{
     private final UserDBRepository userRepository;
     private final SubscriptionDBRepository subscriptionRepository;
@@ -16,20 +19,17 @@ public class SubscriptionService{
         this.subscriptionRepository = subscriptionRepository;
     }
 
-    public void addSubscription(String id, UUID user_id, String subscriptionName, Date startDate, Date endDate, String subscriptionType, Float price)
+    public void addSubscription(String id, String user_id, String subscriptionName, Date startDate, Date endDate, String subscriptionType, Float price)
     {
         Subscription subscription = new Subscription(id, subscriptionName, startDate, endDate, subscriptionType, price);
-        subscription.setUserID(user_id);
-        String u_id = UUID.toString(user_id);
-        if(userRepository.searchById(u_id) == null)
+        if(userRepository.searchById(user_id) == null)
         {
             throw new ValidationException("\nAcest user nu exista!\n");
         }
 
-        if(subscriptionDBRepository.searchById(id) != null){
-            throw new ValidationException("\nExista deja acest subscription!\n")
+        if(subscriptionRepository.searchById(id) != null){
+            throw new ValidationException("\nExista deja acest subscription!\n");
         }
-        subscriptionRepository(subscription);
     }
 
     public void deleteSubscription(String id, String subscriptionName, Date startDate, Date endDate, String subscriptionType, Float price){
